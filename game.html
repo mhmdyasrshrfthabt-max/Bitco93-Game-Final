@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>🚀 Bitco93 - اللعبة</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="game.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="game-container">
+        <canvas id="game-canvas"></canvas>
+        
+        <div class="ui-overlay">
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-icon">⭐</span>
+                    <span id="score">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">❤️</span>
+                    <span id="lives">3</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">⏱️</span>
+                    <span id="time">00:00</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">🎯</span>
+                    <span id="level">المستوى 1</span>
+                </div>
+            </div>
+            
+            <button id="pause-btn" title="إيقاف مؤقت">⏸️</button>
+            
+            <div class="controls">
+                <div class="control-group">
+                    <button class="control-btn" id="left-btn" title="يسار">←</button>
+                    <button class="control-btn" id="jump-btn" title="قفز">↑</button>
+                    <button class="control-btn" id="right-btn" title="يمين">→</button>
+                </div>
+            </div>
+            
+            <div class="stretch-area" id="stretch-area">
+                💪 اسحب هنا لشد الرجدول!
+            </div>
+            
+            <div class="tutorial" id="tutorial">
+                🎮 استخدم الأزرار للحركة، واسحب المنطقة لشد شخصيتك!
+            </div>
+        </div>
+        
+        <!-- Pause Menu -->
+        <div class="menu" id="pause-menu">
+            <h2>⏸️ إيقاف مؤقت</h2>
+            <p>اللعبة متوقفة مؤقتاً</p>
+            <div class="menu-buttons">
+                <button class="menu-btn" onclick="resumeGame()">استمرار</button>
+                <button class="menu-btn" onclick="restartLevel()">إعادة المستوى</button>
+                <button class="menu-btn" onclick="goToMainMenu()">القائمة الرئيسية</button>
+                <button class="menu-btn" onclick="toggleSound()">🔊 الصوت: <span id="game-sound-status">تشغيل</span></button>
+            </div>
+        </div>
+        
+        <!-- Level Complete Menu -->
+        <div class="menu" id="level-complete-menu">
+            <h2>🎉 مستوى مكتمل!</h2>
+            <p>تهانينا! لقد أكملت المستوى</p>
+            <div class="stats" style="position: relative; margin: 20px auto; width: fit-content;">
+                <div class="stat-item">⭐ النقاط: <span id="final-score">0</span></div>
+                <div class="stat-item">⏱️ الوقت: <span id="final-time">00:00</span></div>
+                <div class="stat-item">❤️ الأرواح المتبقية: <span id="final-lives">3</span></div>
+            </div>
+            <div class="menu-buttons">
+                <button class="menu-btn" onclick="nextLevel()">المستوى التالي</button>
+                <button class="menu-btn" onclick="restartLevel()">إعادة اللعب</button>
+                <button class="menu-btn" onclick="goToMainMenu()">القائمة الرئيسية</button>
+            </div>
+        </div>
+        
+        <!-- Game Over Menu -->
+        <div class="menu" id="game-over-menu">
+            <h2>💀 انتهت اللعبة</h2>
+            <p>لقد نفذت الأرواح!</p>
+            <div class="stats" style="position: relative; margin: 20px auto; width: fit-content;">
+                <div class="stat-item">⭐ النقاط النهائية: <span id="game-over-score">0</span></div>
+                <div class="stat-item">🎯 المستوى: <span id="game-over-level">1</span></div>
+            </div>
+            <div class="menu-buttons">
+                <button class="menu-btn" onclick="restartLevel()">إعادة المحاولة</button>
+                <button class="menu-btn" onclick="goToMainMenu()">القائمة الرئيسية</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="game.js"></script>
+    <script>
+        // Canvas setup
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Set canvas size
+        function resizeCanvas() {
+            const maxWidth = window.innerWidth;
+            const maxHeight = window.innerHeight;
+            const aspectRatio = 16/9;
+            
+            let width = maxWidth;
+            let height = width / aspectRatio;
+            
+            if (height > maxHeight) {
+                height = maxHeight;
+                width = height * aspectRatio;
+            }
+            
+            canvas.width = width;
+            canvas.height = height;
+            canvas.style.width = width + 'px';
+            canvas.style.height = height + 'px';
+        }
+        
+        // Initial resize
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        // Sound management
+        let soundEnabled = true;
+        
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('game-sound-status').textContent = soundEnabled ? 'تشغيل' : 'إيقاف';
+            localStorage.setItem('bitco93_sound', soundEnabled);
+            
+            if (soundEnabled) {
+                playSound('click');
+            }
+        }
+        
+        // Load sound preference
+        if (localStorage.getItem('bitco93_sound') !== null) {
+            soundEnabled = localStorage.getItem('bitco93_sound') === 'true';
+            document.getElementById('game-sound-status').textContent = soundEnabled ? 'تشغيل' : 'إيقاف';
+        }
+        
+        // Sound functions
+        function playSound(soundName) {
+            if (!soundEnabled) return;
+            
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            switch(soundName) {
+                case 'jump':
+                    oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime);
+                    break;
+                case 'coin':
+                    oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime);
+                    break;
+                case 'hurt':
+                    oscillator.frequency.setValueAtTime(220, audioContext.currentTime);
+                    break;
+                case 'win':
+                    oscillator.frequency.setValueAtTime(880, audioContext.currentTime);
+                    break;
+                default:
+                    oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+            }
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+            
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.2);
+        }
+        
+        // Menu controls
+        const pauseBtn = document.getElementById('pause-btn');
+        const pauseMenu = document.getElementById('pause-menu');
+        const levelCompleteMenu = document.getElementById('level-complete-menu');
+        const gameOverMenu = document.getElementById('game-over-menu');
+        
+        pauseBtn.addEventListener('click', pauseGame);
+        
+        function pauseGame() {
+            gamePaused = true;
+            pauseMenu.style.display = 'block';
+            playSound('click');
+        }
+        
+        function resumeGame() {
+            gamePaused = false;
+            pauseMenu.style.display = 'none';
+            playSound('click');
+        }
+        
+        function restartLevel() {
+            // Reset game state
+            score = 0;
+            lives = 3;
+            gameTime = 0;
+            level = 1;
+            
+            // Reset UI
+            document.getElementById('score').textContent = '0';
+            document.getElementById('lives').textContent = '3';
+            document.getElementById('time').textContent = '00:00';
+            document.getElementById('level').textContent = 'المستوى 1';
+            
+            // Hide menus
+            pauseMenu.style.display = 'none';
+            levelCompleteMenu.style.display = 'none';
+            gameOverMenu.style.display = 'none';
+            
+            // Reset player position
+            player.x = canvas.width * 0.1;
+            player.y = canvas.height * 0.6;
+            
+            playSound('click');
+        }
+        
+        function nextLevel() {
+            level++;
+            document.getElementById('level').textContent = `المستوى ${level}`;
+            levelCompleteMenu.style.display = 'none';
+            
+            // Reset player position for new level
+            player.x = canvas.width * 0.1;
+            player.y = canvas.height * 0.6;
+            
+            playSound('win');
+        }
+        
+        function goToMainMenu() {
+            window.location.href = 'index.html';
+        }
+        
+        // Show tutorial
+        setTimeout(() => {
+            document.getElementById('tutorial').style.display = 'none';
+        }, 5000);
+    </script>
+</body>
+</html>
