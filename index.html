@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Bitco93 - لعبة منصات مضحكة بفيزياء الرجدول">
+    <meta name="keywords" content="لعبة, أركيد, منصات, فيزياء, عربية, مجانية">
+    <meta name="author" content="Bitco93 Team">
+    <title>🚀 Bitco93 - لعبة بلونكي المضحكة</title>
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">🎮</div>
+            <h1>🚀 لعبة Bitco93</h1>
+            <p class="tagline">لعبة منصات مضحكة بفيزياء الرجدول - استمتع بالمغامرة!</p>
+        </header>
+        
+        <div class="game-preview">
+            <canvas id="preview-canvas"></canvas>
+        </div>
+        
+        <div class="buttons">
+            <button class="btn btn-primary pulse" onclick="startGame()">
+                <i class="fas fa-play"></i> ابدأ اللعب الآن
+            </button>
+            <button class="btn btn-secondary" onclick="showInstructions()">
+                <i class="fas fa-book"></i> كيفية اللعب
+            </button>
+            <button class="btn btn-accent" onclick="toggleSound()">
+                <i class="fas fa-volume-up"></i> الصوت: <span id="sound-status">تشغيل</span>
+            </button>
+        </div>
+        
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🤪</div>
+                <h3>فيزياء مضحكة</h3>
+                <p>استمتع بفيزياء الرجدول المضحكة التي تجعل كل حركة فريدة ومضحكة!</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>تحكم باللمس</h3>
+                <p>تحكم كامل باللمس للجوال أو استخدم لوحة المفاتيح للكمبيوتر!</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>مستويات متعددة</h3>
+                <p>تحديات متنوعة في 3 مستويات مختلفة مع عقبات ومفاجآت!</p>
+            </div>
+        </section>
+        
+        <section class="instructions" id="instructions" style="display: none;">
+            <h2>🎮 كيفية اللعب</h2>
+            <div class="instruction-grid">
+                <div class="instruction-item">
+                    <div class="instruction-icon">←→</div>
+                    <div>
+                        <h4>الحركة</h4>
+                        <p>استخدم الأسهم أو الأزرار للحركة يميناً ويساراً</p>
+                    </div>
+                </div>
+                
+                <div class="instruction-item">
+                    <div class="instruction-icon">Space</div>
+                    <div>
+                        <h4>القفز</h4>
+                        <p>اضغط Space أو زر القفز للقفز فوق العقبات</p>
+                    </div>
+                </div>
+                
+                <div class="instruction-item">
+                    <div class="instruction-icon">🖱️</div>
+                    <div>
+                        <h4>شد الرجدول</h4>
+                        <p>اسحب الشاشة لشد شخصيتك والوصول لأماكن بعيدة</p>
+                    </div>
+                </div>
+                
+                <div class="instruction-item">
+                    <div class="instruction-icon">⭐</div>
+                    <div>
+                        <h4>جمع النقاط</h4>
+                        <p>اجمع العملات واجتاز العقبات لاكتساب نقاط أعلى</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <p>شارك اللعبة مع أصدقائك واستمتع بالتحدي!</p>
+            
+            <div class="social-links">
+                <a href="#" class="social-link" onclick="return false;"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-link" onclick="return false;"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="social-link" onclick="return false;"><i class="fab fa-instagram"></i></a>
+                <a href="https://github.com" class="social-link" target="_blank"><i class="fab fa-github"></i></a>
+            </div>
+            
+            <p class="copyright">
+                © 2024 Bitco93 Game. جميع الحقوق محفوظة.<br>
+                صنعت بكل ❤️ للمجتمع العربي للألعاب
+            </p>
+        </footer>
+    </div>
+    
+    <script>
+        // Preview Animation
+        const previewCanvas = document.getElementById('preview-canvas');
+        const previewCtx = previewCanvas.getContext('2d');
+        
+        // Set canvas size
+        previewCanvas.width = previewCanvas.offsetWidth;
+        previewCanvas.height = previewCanvas.offsetHeight;
+        
+        // Simple animation for preview
+        function drawPreview() {
+            previewCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+            
+            // Draw sky
+            const gradient = previewCtx.createLinearGradient(0, 0, 0, previewCanvas.height);
+            gradient.addColorStop(0, '#87CEEB');
+            gradient.addColorStop(1, '#E0F7FF');
+            previewCtx.fillStyle = gradient;
+            previewCtx.fillRect(0, 0, previewCanvas.width, previewCanvas.height);
+            
+            // Draw clouds
+            const time = Date.now() / 1000;
+            for(let i = 0; i < 3; i++) {
+                const x = (previewCanvas.width * 0.2 * i + time * 50) % (previewCanvas.width + 100) - 50;
+                const y = 50 + Math.sin(time + i) * 20;
+                
+                previewCtx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                previewCtx.beginPath();
+                previewCtx.arc(x, y, 30, 0, Math.PI * 2);
+                previewCtx.arc(x + 40, y, 40, 0, Math.PI * 2);
+                previewCtx.arc(x + 80, y, 30, 0, Math.PI * 2);
+                previewCtx.fill();
+            }
+            
+            // Draw ground
+            previewCtx.fillStyle = '#8B4513';
+            previewCtx.fillRect(0, previewCanvas.height - 60, previewCanvas.width, 60);
+            
+            // Draw grass
+            previewCtx.fillStyle = '#4CAF50';
+            previewCtx.fillRect(0, previewCanvas.height - 60, previewCanvas.width, 10);
+            
+            // Draw platforms
+            previewCtx.fillStyle = '#A0522D';
+            previewCtx.fillRect(100, previewCanvas.height - 150, 150, 20);
+            previewCtx.fillRect(350, previewCanvas.height - 250, 150, 20);
+            previewCtx.fillRect(600, previewCanvas.height - 180, 150, 20);
+            
+            // Draw player
+            const playerX = 200 + Math.sin(time * 2) * 50;
+            const playerY = previewCanvas.height - 210 + Math.cos(time) * 20;
+            
+            previewCtx.fillStyle = '#4CAF50';
+            previewCtx.beginPath();
+            previewCtx.arc(playerX, playerY, 20, 0, Math.PI * 2);
+            previewCtx.fill();
+            
+            // Draw eyes
+            previewCtx.fillStyle = 'white';
+            previewCtx.beginPath();
+            previewCtx.arc(playerX - 8, playerY - 5, 5, 0, Math.PI * 2);
+            previewCtx.arc(playerX + 8, playerY - 5, 5, 0, Math.PI * 2);
+            previewCtx.fill();
+            
+            // Draw smile
+            previewCtx.strokeStyle = 'red';
+            previewCtx.lineWidth = 3;
+            previewCtx.beginPath();
+            previewCtx.arc(playerX, playerY + 5, 10, 0.1 * Math.PI, 0.9 * Math.PI);
+            previewCtx.stroke();
+            
+            // Draw coins
+            previewCtx.fillStyle = '#FFD700';
+            for(let i = 0; i < 5; i++) {
+                const coinX = 150 + i * 120;
+                const coinY = previewCanvas.height - 200 - Math.sin(time + i) * 30;
+                previewCtx.beginPath();
+                previewCtx.arc(coinX, coinY, 10, 0, Math.PI * 2);
+                previewCtx.fill();
+                
+                previewCtx.fillStyle = '#FFF';
+                previewCtx.beginPath();
+                previewCtx.arc(coinX - 3, coinY - 3, 3, 0, Math.PI * 2);
+                previewCtx.fill();
+                previewCtx.fillStyle = '#FFD700';
+            }
+            
+            requestAnimationFrame(drawPreview);
+        }
+        
+        // Start preview animation
+        drawPreview();
+        
+        // Resize canvas on window resize
+        window.addEventListener('resize', () => {
+            previewCanvas.width = previewCanvas.offsetWidth;
+            previewCanvas.height = previewCanvas.offsetHeight;
+        });
+        
+        // Game functions
+        function startGame() {
+            window.location.href = 'game.html';
+        }
+        
+        function showInstructions() {
+            const instructions = document.getElementById('instructions');
+            instructions.style.display = instructions.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        let soundEnabled = true;
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('sound-status').textContent = soundEnabled ? 'تشغيل' : 'إيقاف';
+            showNotification(soundEnabled ? '🔊 الصوت مفعل' : '🔇 الصوت معطل');
+        }
+        
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #4CAF50;
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
