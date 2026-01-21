@@ -1,0 +1,267 @@
+/* game.css - أنماط صفحة اللعبة */
+
+:root {
+    --primary: #4CAF50;
+    --secondary: #2196F3;
+    --accent: #FF5722;
+    --dark: #1a1a2e;
+    --light: #f8f9fa;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+}
+
+body {
+    font-family: 'Cairo', sans-serif;
+    background: var(--dark);
+    color: var(--light);
+    overflow: hidden;
+    touch-action: none;
+}
+
+.game-container {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+}
+
+#game-canvas {
+    display: block;
+    background: linear-gradient(to bottom, #87CEEB, #E0F7FF);
+    margin: 0 auto;
+}
+
+/* UI Overlay */
+.ui-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.stats {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px 25px;
+    border-radius: 15px;
+    font-size: 1.3rem;
+    pointer-events: auto;
+    backdrop-filter: blur(5px);
+    border: 2px solid var(--primary);
+}
+
+.stat-item {
+    margin: 5px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.stat-icon {
+    color: var(--primary);
+    font-size: 1.5rem;
+}
+
+/* Controls */
+.controls {
+    position: absolute;
+    bottom: 30px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 30px;
+    pointer-events: none;
+}
+
+.control-group {
+    display: flex;
+    gap: 20px;
+    pointer-events: auto;
+}
+
+.control-btn {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.7);
+    border: 3px solid var(--primary);
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.1s ease;
+    backdrop-filter: blur(5px);
+}
+
+.control-btn:active {
+    transform: scale(0.9);
+    background: var(--primary);
+}
+
+.stretch-area {
+    position: absolute;
+    bottom: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 150px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 3px dashed rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.2rem;
+    text-align: center;
+    backdrop-filter: blur(5px);
+}
+
+/* Menus */
+.menu {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    min-width: 300px;
+    backdrop-filter: blur(10px);
+    border: 3px solid var(--primary);
+    display: none;
+    pointer-events: auto;
+}
+
+.menu h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    color: var(--primary);
+}
+
+.menu p {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+}
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.menu-btn {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Cairo', sans-serif;
+}
+
+.menu-btn:hover {
+    background: #45a049;
+    transform: translateY(-3px);
+}
+
+/* Pause button */
+#pause-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid var(--secondary);
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+    pointer-events: auto;
+    transition: all 0.3s ease;
+}
+
+#pause-btn:hover {
+    background: var(--secondary);
+}
+
+/* Tutorial */
+.tutorial {
+    position: absolute;
+    bottom: 300px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    max-width: 400px;
+    border: 2px solid var(--accent);
+    pointer-events: none;
+    animation: fadeInOut 5s forwards;
+}
+
+@keyframes fadeInOut {
+    0%, 90% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    10%, 80% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .stats {
+        top: 10px;
+        left: 10px;
+        padding: 10px 15px;
+        font-size: 1rem;
+    }
+    
+    .control-btn {
+        width: 70px;
+        height: 70px;
+        font-size: 1.8rem;
+    }
+    
+    .stretch-area {
+        height: 120px;
+        font-size: 1rem;
+    }
+    
+    .controls {
+        padding: 0 15px;
+        bottom: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .control-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
+    
+    .stretch-area {
+        bottom: 100px;
+        height: 100px;
+    }
+}
