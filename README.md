@@ -31,8 +31,35 @@
 
 ## 🛠️ التقنيات المستخدمة
 - HTML5 Canvas
-- JavaScript ES6
+- JavaScript Canvas
 - CSS3 مع Animations
 - تصميم متجاوب للجوال
 
 ## 📁 هيكل الملفات
+
+
+## 🚀 النشر على GitHub Pages
+1. انسخ هذا المستودع
+2. اضغط على Settings → Pages
+3. اختر Branch: main → Folder: / (root)
+4. احفظ
+5. انتظر دقيقة ثم افتح الرابط
+
+## 🌐 رابط اللعبة
+[https://mhmdyasrshrfthabt-max.github.io/Bitco93-Bot](https://mhmdyasrshrfthabt-max.github.io/Bitco93-Bot)
+
+## 👥 المساهمة
+1. Fork المشروع
+2. أنشئ فرعاً جديداً
+3. أضف تعديلاتك
+4. أرسل Pull Request
+
+## 📄 الرخصة
+هذا المشروع مرخص تحت رخصة MIT.
+
+## 📞 التواصل
+- تقرير مشكلة: [Issues](https://github.com/mhmdyasrshrfthabt-max/Bitco93-Bot/issues)
+- أفكار جديدة: [Discussions](https://github.com/mhmdyasrshrfthabt-max/Bitco93-Bot/discussions)
+
+---
+صنعت بكل ❤️ للمجتمع العربي للألعاب 🎮
